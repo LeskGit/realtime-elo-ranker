@@ -1,13 +1,18 @@
 import { Module } from '@nestjs/common';
-import { PlayersController } from './modules/players/players.controller';
-import { MatchesController } from './modules/matches/matches.controller';
-import { RankingController } from './modules/ranking/ranking.controller';
-import { EloController } from './modules/elo/elo.controller';
-import { RealtimeController } from './modules/realtime/realtime.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { PlayersModule } from './modules/players/players.module';
 
 @Module({
-  imports: [],
-  controllers: [PlayersController, MatchesController, RankingController, EloController, RealtimeController],
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'sqlite',
+      database: 'realtime-elo-ranker.db',
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      synchronize: true,
+    }),
+    PlayersModule
+  ],
+  controllers: [],
   providers: [],
 })
 export class AppModule {}
