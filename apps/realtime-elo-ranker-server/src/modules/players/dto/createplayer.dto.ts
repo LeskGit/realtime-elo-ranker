@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsString, Max, Min } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, IsString, Min } from 'class-validator';
 
 export class CreatePlayerDto {
 
@@ -6,7 +6,8 @@ export class CreatePlayerDto {
     @IsNotEmpty()
     readonly id: string;
 
+    @IsOptional()
     @IsInt()
     @Min(1)
-    readonly rank: number;
+    readonly rank?: number;
 }

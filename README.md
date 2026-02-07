@@ -255,3 +255,7 @@ Remarques :
 - La constante `400` est un paramètre empirique qui détermine la sensibilité de la probabilité de victoire à la différence de classement. Plus la constante est grande, plus la probabilité de victoire change rapidement avec la différence de classement.
 - Par sa conception, le système Elo est mathématiquement un système transactionnel, c'est-à-dire que la somme des classements des joueurs reste constante après chaque match. Cela signifie que le classement gagné par un joueur est équivalent au classement perdu par son adversaire.
 
+## Lancer les tests et coverage : 
+
+pnpm run --filter ./apps/realtime-elo-ranker-server test
+pnpm run --filter ./apps/realtime-elo-ranker-server test:cov

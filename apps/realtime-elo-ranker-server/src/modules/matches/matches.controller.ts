@@ -1,4 +1,15 @@
-import { Controller } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, ValidationPipe } from '@nestjs/common';
+import { CreateMatchDto } from './dto/creatematch';
+import { MatchesService } from './matches.service';
 
-@Controller('matches')
-export class MatchesController {}
+@Controller('match')
+export class MatchesController {
+
+    constructor(private readonly matchesService: MatchesService) {}
+
+    @Post()
+    @HttpCode(200)
+    publishMatch(@Body(new ValidationPipe({whitelist: true, forbidNonWhitelisted: true, transform: true})) match: CreateMatchDto) {
+        return this.matchesService.publishMatch(match);
+    }
+}

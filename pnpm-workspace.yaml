@@ -24,7 +24,7 @@ catalog:
   jest-environment-jsdom: ~30.1
   livereload: ~0.10
   motion: ~12.23.28
-  next: ~15.5.9
+  next: ~15.5.12
   nodemon: ~3.1
   postcss: ~8.5
   postcss-cli: ~11.0
@@ -37,5 +37,9 @@ catalog:
   yamljs: ~0.3
 
 onlyBuiltDependencies:
+  - '@nestjs/core'
+  - '@scarf/scarf'
   - '@tailwindcss/oxide'
   - sharp
+  - sqlite3
+  - unrs-resolver

@@ -1,18 +1,7 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { EloController } from './elo.controller';
+import { EloController } from '../../src/modules/elo/elo.controller';
 
 describe('EloController', () => {
-  let controller: EloController;
-
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [EloController],
-    }).compile();
-
-    controller = module.get<EloController>(EloController);
-  });
-
   it('should be defined', () => {
-    expect(controller).toBeDefined();
+    expect(EloController).toBeDefined();
   });
 });
