@@ -24,4 +24,25 @@ describe('RealtimeService', () => {
     const event = await eventPromise;
     expect(event.data).toEqual({ type: 'Error', message: 'boom', code: 500 });
   });
+
+  it('should close event stream after an error event', async () => {
+    const received: Array<{ data: unknown }> = [];
+    let completed = false;
+
+    service.getRankingEvents().subscribe({
+      next: (event) => received.push(event as { data: unknown }),
+      complete: () => {
+        completed = true;
+      },
+    });
+
+    service.emitError({ code: 500, message: 'boom' });
+    service.emitRankingUpdate({ id: 'p2', rank: 1300 } as any);
+
+    await new Promise((resolve) => setImmediate(resolve));
+
+    expect(completed).toBe(true);
+    expect(received).toHaveLength(1);
+    expect(received[0].data).toEqual({ type: 'Error', message: 'boom', code: 500 });
+  });
 });

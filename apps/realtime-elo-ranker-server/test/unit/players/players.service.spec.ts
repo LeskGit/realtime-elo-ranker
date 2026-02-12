@@ -7,8 +7,10 @@ import { RealtimeService } from '../../src/modules/realtime/realtime.service';
 
 describe('PlayersService', () => {
   let service: PlayersService;
+  let emitError: jest.Mock;
 
   beforeEach(async () => {
+    emitError = jest.fn();
     const moduleRef = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot({
@@ -23,7 +25,7 @@ describe('PlayersService', () => {
         PlayersService,
         {
           provide: RealtimeService,
-          useValue: { emitRankingUpdate: jest.fn() },
+          useValue: { emitRankingUpdate: jest.fn(), emitError },
         },
       ],
     }).compile();
@@ -48,5 +50,9 @@ describe('PlayersService', () => {
     await expect(service.createPlayer({ id: 'dup' })).rejects.toBeInstanceOf(
       ConflictException,
     );
+    expect(emitError).toHaveBeenCalledWith({
+      code: 409,
+      message: 'player already exists',
+    });
   });
 });

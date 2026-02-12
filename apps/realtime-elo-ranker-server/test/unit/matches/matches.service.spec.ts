@@ -12,8 +12,10 @@ import { RealtimeService } from '../../src/modules/realtime/realtime.service';
 describe('MatchesService', () => {
   let service: MatchesService;
   let playersRepository: Repository<Player>;
+  let emitError: jest.Mock;
 
   beforeEach(async () => {
+    emitError = jest.fn();
     const moduleRef = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot({
@@ -29,7 +31,7 @@ describe('MatchesService', () => {
         EloService,
         {
           provide: RealtimeService,
-          useValue: { emitRankingUpdate: jest.fn() },
+          useValue: { emitRankingUpdate: jest.fn(), emitError },
         },
       ],
     }).compile();
@@ -42,18 +44,30 @@ describe('MatchesService', () => {
     await expect(
       service.publishMatch({ winner: undefined, loser: 'b', draw: false } as any),
     ).rejects.toBeInstanceOf(BadRequestException);
+    expect(emitError).toHaveBeenCalledWith({
+      code: 400,
+      message: 'winner and loser are required to publish a match result',
+    });
   });
 
   it('should reject same winner and loser', async () => {
     await expect(
       service.publishMatch({ winner: 'a', loser: 'a', draw: false }),
     ).rejects.toBeInstanceOf(BadRequestException);
+    expect(emitError).toHaveBeenCalledWith({
+      code: 400,
+      message: 'winner and loser must be different players',
+    });
   });
 
   it('should reject unknown players', async () => {
     await expect(
       service.publishMatch({ winner: 'a', loser: 'b', draw: false }),
     ).rejects.toBeInstanceOf(UnprocessableEntityException);
+    expect(emitError).toHaveBeenCalledWith({
+      code: 422,
+      message: 'winner or loser does not exist',
+    });
   });
 
   it('should handle draw matches', async () => {

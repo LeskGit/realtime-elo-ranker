@@ -1,12 +1,12 @@
-import { IsBoolean, IsNotEmpty, IsString, ValidateIf } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
+
+// Cette classe représente le DTO utilisé pour créer un nouveau match (avec des règles de validation).
 
 export class CreateMatchDto {
-    @ValidateIf((value) => value.draw === false)
     @IsString()
     @IsNotEmpty()
     readonly winner?: string;
 
-    @ValidateIf((value) => value.draw === false)
     @IsString()
     @IsNotEmpty()
     readonly loser?: string;

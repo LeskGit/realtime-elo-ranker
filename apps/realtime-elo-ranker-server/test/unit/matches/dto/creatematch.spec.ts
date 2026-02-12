@@ -2,9 +2,18 @@ import { validate } from 'class-validator';
 import { CreateMatchDto } from '../../../src/modules/matches/dto/creatematch';
 
 describe('CreateMatchDto', () => {
-  it('should allow draw without winner/loser', async () => {
+  it('should require winner/loser even when draw is true', async () => {
     const dto = new CreateMatchDto();
     (dto as any).draw = true;
+    const errors = await validate(dto);
+    expect(errors.length).toBeGreaterThan(0);
+  });
+
+  it('should allow draw with winner/loser provided', async () => {
+    const dto = new CreateMatchDto();
+    (dto as any).draw = true;
+    (dto as any).winner = 'alice';
+    (dto as any).loser = 'bob';
     const errors = await validate(dto);
     expect(errors.length).toBe(0);
   });

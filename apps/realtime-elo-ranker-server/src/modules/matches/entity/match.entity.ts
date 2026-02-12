@@ -1,5 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
+// Cette classe représente l'entité Match qui sera utilisée par TypeORM pour interagir avec la base de données.
+
 @Entity()
 export class Match {
 
